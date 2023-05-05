@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+    
+  prometheus:
+    image: prom/prometheus:latest
+    expose:
+      - 9090
+    volumes:
+      - ./prometheus_data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    expose:
+      - 8081
+    volumes:
+    - ./:/rootfs:ro
+    - ./var/run:/var/run:rw
+    - ./sys:/sys:ro
+    - ./var/lib/docker/:/var/lib/docker:ro
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    expose:
+      - 9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
