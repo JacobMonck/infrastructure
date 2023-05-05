@@ -6,6 +6,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana_data:/var/lib/grafana
     
   prometheus:
@@ -13,7 +14,7 @@ services:
     expose:
       - 9090
     volumes:
-      - ./prometheus_data:/prometheus
+      - ./prometheus_data:/var/lib/grafana
       - ./services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
 
   cadvisor:
