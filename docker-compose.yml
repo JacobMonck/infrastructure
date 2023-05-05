@@ -14,17 +14,17 @@ services:
       - 9090
     volumes:
       - ./prometheus_data:/prometheus
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
     expose:
       - 8081
     volumes:
-    - ./:/rootfs:ro
-    - ./var/run:/var/run:rw
-    - ./sys:/sys:ro
-    - ./var/lib/docker/:/var/lib/docker:ro
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
 
   node_exporter:
     image: prom/node-exporter:latest
